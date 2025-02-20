@@ -3,14 +3,20 @@ import qrcode
 from io import BytesIO
 from cryptography.fernet import Fernet
 import base64
+import os
 
 app = Flask(__name__)
 
-# 1. Replace the generated key with a static key:
-#    You can generate your own by running:
-#    python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
-STATIC_KEY = b'qpJCztrT_jQxxbRkztfY5P2i7cdsBj1oQzKkQeI2CoQ='  # Example key
-cipher = Fernet(STATIC_KEY)
+# Get the Fernet key from Railway environment variables
+STATIC_KEY = os.environ.get("STATIC_KEY")
+
+if not STATIC_KEY:
+    raise ValueError("STATIC_KEY environment variable is not set!")
+
+try:
+    cipher = Fernet(STATIC_KEY.encode())  # Ensure it's in the correct format
+except Exception:
+    raise ValueError("Invalid STATIC_KEY! Ensure it is a 32-byte base64-encoded string.")
 
 BASE_URL = "https://www.linktospin.com/?order_id="
 
@@ -63,5 +69,4 @@ def decrypt_qr():
         return jsonify({"error": "Invalid encrypted ID"}), 400
 
 if __name__ == '__main__':
-    # 2. Run your Flask app
     app.run(host='0.0.0.0', port=5000)
