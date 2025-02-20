@@ -14,10 +14,16 @@ BASE_URL = "https://www.linktospin.com/?order_id="
 
 def encrypt_order_id(order_id):
     """Encrypt order ID and return a URL-safe string."""
-    return cipher.encrypt(order_id.encode()).decode()
+    encrypted = cipher.encrypt(order_id.encode()).decode()
+    return encrypted.rstrip('=')
+
 
 def decrypt_order_id(encrypted_id):
     """Decrypt the encoded order ID."""
+    padding = 4 - (len(encrypted_id) % 4)
+    if padding != 4:
+        encrypted_id = encrypted_id + ('=' * padding)
+
     return cipher.decrypt(encrypted_id.encode()).decode()
 
 def generate_qr(encrypted_order_id):
@@ -59,4 +65,4 @@ def decrypt_qr():
         return jsonify({"error": "Invalid encrypted ID"}), 400
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8080)
