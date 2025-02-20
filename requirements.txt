@@ -1,4 +1,2 @@
 Flask
-qrcode
-cryptography
-Pillow
+qrcode[pil]
