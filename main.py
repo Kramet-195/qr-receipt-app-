@@ -13,14 +13,12 @@ cipher = Fernet(SECRET_KEY)
 BASE_URL = "https://www.linktospin.com/?order_id="
 
 def encrypt_order_id(order_id):
-    """Encrypt order ID and return a URL-safe encoded string."""
-    encrypted_id = cipher.encrypt(order_id.encode())
-    return base64.urlsafe_b64encode(encrypted_id).decode()
+    """Encrypt order ID and return a URL-safe string."""
+    return cipher.encrypt(order_id.encode()).decode()
 
 def decrypt_order_id(encrypted_id):
     """Decrypt the encoded order ID."""
-    encrypted_bytes = base64.urlsafe_b64decode(encrypted_id)
-    return cipher.decrypt(encrypted_bytes).decode()
+    return cipher.decrypt(encrypted_id.encode()).decode()
 
 def generate_qr(encrypted_order_id):
     """Generate a QR code and return it as a PNG byte stream."""
