@@ -6,9 +6,11 @@ import base64
 
 app = Flask(__name__)
 
-# Generate and store a secret key (ensure this remains constant for decryption)
-SECRET_KEY = Fernet.generate_key()
-cipher = Fernet(SECRET_KEY)
+# 1. Replace the generated key with a static key:
+#    You can generate your own by running:
+#    python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+STATIC_KEY = b'qpJCztrT_jQxxbRkztfY5P2i7cdsBj1oQzKkQeI2CoQ='  # Example key
+cipher = Fernet(STATIC_KEY)
 
 BASE_URL = "https://www.linktospin.com/?order_id="
 
@@ -61,4 +63,5 @@ def decrypt_qr():
         return jsonify({"error": "Invalid encrypted ID"}), 400
 
 if __name__ == '__main__':
+    # 2. Run your Flask app
     app.run(host='0.0.0.0', port=5000)
