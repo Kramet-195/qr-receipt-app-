@@ -1,64 +1,38 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, render_template, send_file
 import qrcode
-from io import BytesIO
-from cryptography.fernet import Fernet
-import base64
+import random
+import io
 
 app = Flask(__name__)
 
-# Hardcoding the new secret key
-SECRET_KEY = b'y5YIl8WAa9DaehnWfffIV5OMsPB1ro30y1ACzCvlHfI='
-cipher = Fernet(SECRET_KEY)
+# List to store unique 8-digit codes
+codes = [str(random.randint(10000000, 99999999)) for _ in range(1000)]
 
-BASE_URL = "https://www.linktospin.com/?order_id="
 
-def encrypt_order_id(order_id):
-    """Encrypt order ID and return a URL-safe encoded string."""
-    encrypted_id = cipher.encrypt(order_id.encode())
-    return base64.urlsafe_b64encode(encrypted_id).decode()
+# Function to generate a QR code for the link
+def generate_qr_code(url):
+    img = qrcode.make(url)
+    byte_io = io.BytesIO()
+    img.save(byte_io, 'PNG')
+    byte_io.seek(0)
+    return byte_io
 
-def decrypt_order_id(encrypted_id):
-    """Decrypt the encoded order ID."""
-    encrypted_bytes = base64.urlsafe_b64decode(encrypted_id)
-    return cipher.decrypt(encrypted_bytes).decode()
 
-def generate_qr(encrypted_order_id):
-    """Generate a QR code and return it as a PNG byte stream."""
-    qr_url = BASE_URL + encrypted_order_id
-    qr = qrcode.make(qr_url)
+@app.route('/')
+def index():
+    # Get a random code from the list
+    if codes:
+        code = codes.pop(random.randint(0, len(codes) - 1))  # Pop a random code
+        url = f"https://www.linktospin.com/{code}"  # The URL with the code
 
-    buffer = BytesIO()
-    qr.save(buffer, format="PNG")
-    buffer.seek(0)
+        # Generate the QR code
+        qr_code_image = generate_qr_code(url)
 
-    return buffer
+        # Return the receipt with QR code and the used code
+        return render_template('receipt.html', qr_code_image=qr_code_image, code=code)
+    else:
+        return "No codes available", 404
 
-@app.route('/generate_qr', methods=['GET'])
-def get_qr():
-    """API endpoint to generate and return a QR code for an encrypted order ID."""
-    order_id = request.args.get('order_id')
-
-    if not order_id:
-        return jsonify({"error": "Missing order_id"}), 400
-
-    encrypted_order_id = encrypt_order_id(order_id)
-    buffer = generate_qr(encrypted_order_id)
-
-    return send_file(buffer, mimetype='image/png')
-
-@app.route('/decrypt', methods=['GET'])
-def decrypt_qr():
-    """API to decrypt an order ID from a QR code URL."""
-    encrypted_id = request.args.get('order_id')
-
-    if not encrypted_id:
-        return jsonify({"error": "Missing encrypted order_id"}), 400
-
-    try:
-        decrypted_order_id = decrypt_order_id(encrypted_id)
-        return jsonify({"order_id": decrypted_order_id})
-    except Exception:
-        return jsonify({"error": "Invalid encrypted ID"}), 400
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True)
