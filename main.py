@@ -3,15 +3,11 @@ import qrcode
 from io import BytesIO
 from cryptography.fernet import Fernet
 import base64
-import os
 
 app = Flask(__name__)
 
-# Retrieve the secret key from Railway environment variables
-SECRET_KEY = os.environ.get("SECRET_KEY")  # Make sure to set this on Railway
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable is missing")
-
+# Hardcoding the new secret key
+SECRET_KEY = b'y5YIl8WAa9DaehnWfffIV5OMsPB1ro30y1ACzCvlHfI='
 cipher = Fernet(SECRET_KEY)
 
 BASE_URL = "https://www.linktospin.com/?order_id="
