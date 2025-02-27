@@ -1,0 +1,1605 @@
+<html>
+<head>
+	<style>
+		html { font: 28px/1 'Helvetica', sans-serif; overflow: auto; padding: 0.5in; }
+		html { background: none; padding: 0; width: 556 }
+		body { width: 556; }
+		table { font: 28px/1 'Helvetica', sans-serif; padding-right: 30px; border-collapse: collapse; table-layout: fixed; line-height: 130%;}
+		td.right { overflow: hidden; text-align: right; width: 35% }
+		td.leftt { overflow: hidden; text-align: left; }
+	</style>
+</head>
+<body>
+	<table width = "100%">
+		<tr style="border-bottom: 3px solid black;">
+			<td colspan = "2" align = "center">
+				{{# receiptTopLine1 }}{{ receiptTopLine1 }}<br/>{{/ }}
+				{{# receiptTopLine2 }}{{ receiptTopLine2 }}<br/>{{/ }}
+				{{# receiptTopLine3 }}{{ receiptTopLine3 }}<br/>{{/ }}
+				{{# receiptTopLine4 }}{{ receiptTopLine4 }}<br/>{{/ }}
+				{{# receiptTopLine5 }}{{ receiptTopLine5 }}<br/>{{/ }}
+				{{# receiptTopLine6 }}{{ receiptTopLine6 }}<br/>{{/ }}
+			</td>
+		</tr>
+		
+		{{^ merchantCopy }}
+		{{# order.gratuity }}
+		<tr>
+			<td colspan = "2" align = "center">**** Service Charge Included ****</td>
+		</tr>
+		{{/ order.gratuity }}
+		{{/ merchantCopy }}
+		
+		{{# isGiftReceipt }}
+		<tr>
+			<td align = "right" colspan = "2">GIFT</td>
+		</tr>
+		{{/ isGiftReceipt }}
+		
+		<tr>
+			<td align = "right" colspan = "2">{{# order.invoice }}Invoice{{^ }}Order {{/ }}# {{ order.displayId }}{{# evenOrOddBill }} - {{ number }}{{/ }}</td>
+		</tr>
+		
+		{{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Order_Option.intValue, number7) }}
+		{{# diningOptionTitle }}
+		<tr>
+			<td align = "right" colspan = "2">{{ diningOptionTitle }}</td>
+		</tr>
+		{{/ diningOptionTitle }}
+		{{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Order_Option.intValue, number7) }}
+		
+		{{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Station_Number.intValue, number8) }}
+		{{# station.name }}
+		<tr>
+			<td align = "right" colspan = "2">{{ station.name }}</td>
+		</tr>
+		{{/ station.name }}
+		{{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Station_Number.intValue, number8) }}
+		
+		{{# table }}
+		<tr>
+			<td align = "right" colspan = "2">Table Owner: {{ employee.shortName }}</td>
+		</tr>
+		<tr>
+			<td align = "right" colspan = "2">Table: {{ table.name }}</td>
+		</tr>
+		{{/ table }}
+		
+		{{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_Number.intValue, number3) }}
+		{{# order.callNumber }}
+		<tr>
+			<td align = "right" colspan = "2">Call Number: {{ order.callNumber }}</td>
+		</tr>
+		{{/ order.callNumber }}
+		{{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_Number.intValue, number3) }}
+		
+		{{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Customer_Name.intValue, number1) }}
+		{{# customer }}
+		<tr>
+			<td align = "right" colspan = "2">Customer: {{ customer.fullName }}</td>
+		</tr>
+		{{/ customer }}
+		{{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Customer_Name.intValue, number1) }}
+		
+		{{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_name.intValue, number12) }}
+		{{# order.callName }}
+		<tr>
+			<td align = "right" colspan = "2">Call Name: {{ order.callName }}</td>
+		</tr>
+		{{/ order.callName }}
+		{{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_name.intValue, number12) }}
+		
+		{{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Guest_Count.intValue, number6) }}
+		{{# order.seatCount }}
+		<tr>
+			<td align = "right" colspan = "2">Seat Count: {{ order.seatCount }}</td>
+		</tr>
+		{{/ order.seatCount }}
+		{{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Guest_Count.intValue, number6) }}
+		
+		{{# order.barTab }}
+		<tr>
+			<td align = "right" colspan = "2">Bar Tab: #{{ order.barTab }}</td>
+		</tr>
+		{{/ order.barTab }}
+		
+		{{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Server_Name.intValue, number9) }}
+		{{# employee }}
+		<tr>
+			<td align = "right" colspan = "2">Served By: {{ employee.shortName }}</td>
+		</tr>
+		{{/ employee }}
+		{{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Server_Name.intValue, number9) }}
+		
+		{{# order.dateDue }}
+		<tr>
+			<td align = "right" colspan = "2">Due: {{# dateWithFormat(order.dateDue) }}MM/dd/yyyy hh:mm a{{/ }}</td>
+		</tr>
+		{{/ order.dateDue }}
+		<tr style="border-bottom: 3px solid black;">
+			<td align = "right" colspan = "2">Date: {{# dateWithFormat(order.createdDate)}}MM/dd/yyyy hh:mm a{{/ }}</td>
+		</tr>
+	</table>
+	<table width = "100%">
+		{{# itemsToDisplay }}
+			
+			<tr>
+				<td class="left">
+					{{ itemName }}
+				</td>
+				<td class="right">
+					{{# isQuantityOne }}
+						{{^ payment }}
+							{{^ isFinalReceipt }}
+								{{ currencySymbol }}{{# shortFloatString }}{{ priceWithModifiers }}{{/ }}
+							{{/ }}
+							{{^ isPartOfCombo }}
+								{{# isFinalReceipt}}
+									{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }}
+								{{/ }}
+							{{/ }}
+						{{/ }}
+						{{^ isPartOfCombo }}
+							{{# payment }}
+								{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }}
+							{{/ }}
+						{{/ }}
+					{{^ }}
+						{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }}
+					{{/ }}
+				</td>
+			</tr>
+			
+			{{^ isQuantityOne}}
+				<tr>
+					<td align = "left" colspan = "2">
+						&nbsp;&nbsp;{{ currencySymbol }}{{# shortFloatString }}{{ itemIndividualPrice }}{{/ }} each
+					</td>
+				</tr>
+			{{/ }}
+			
+			{{# product.soldByWeight }}
+				<tr>
+					<td align = "left" colspan = "2">
+						{{ weight }}
+					</td>
+				</tr>
+				{{# isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }}
+					<tr>
+						<td align = "left" colspan = "2">
+							MAN
+						</td>
+					</tr>
+				{{/ isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }}
+			{{/ product.soldByWeight }}
+			
+			{{# isEqual(receipt_print_description.enabled,True) }}
+				{{# product.productDescription }}
+					<tr>
+						<td align = "left" colspan = "2">
+							&nbsp;&nbsp;{{ product.productDescription }}
+						</td>
+					</tr>
+				{{/ }}
+			{{/ }}
+			
+			{{# serialNumber }}
+				<tr>
+					<td align = "left" colspan = "2">
+						{{ serialNumber }}
+					</td>
+				</tr>
+			{{/ }}
+			
+			{{! Undelected Default Modifiers }}
+			{{# unselectedModifiers }}
+				{{# isEqual(type, ModifierType.Regular) }}
+					<tr>
+						<td colspan = "2" align = "left">
+							&nbsp;&nbsp;&nbsp;NO&nbsp;
+							{{^ isQuantityOne }}{{ qty }}{{/ isQuantityOne }}{{# kitchenName }}{{ kitchenName }}{{^ }}{{ name }}{{/ kitchenName }}
+						</td>
+					</tr>
+				{{/ isEqual(type, ModifierType.Regular) }}
+			{{/ unselectedModifiers }}
+			
+			{{! Modifiers }}
+			{{# modifierGroupArray }}
+				{{# isEqual(type, ItemSplitType.FirstHalf) }}
+					<tr>
+						<td align = "center" colspan = "2">First Half</td>
+					</tr>
+				{{/ }}
+				{{# isEqual(type, ItemSplitType.SecondHalf) }}
+					<tr>
+						<td align = "center" colspan = "2">Second Half</td>
+					</tr>
+				{{/ }}
+				{{# modItems }}
+					<tr>
+						<td class="left">
+							&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}
+						</td>
+						<td class="right">
+							{{^ isEqual(price, ##String##+$0.00##) }}{{ price }}&nbsp;&nbsp;{{/ }}
+						</td>
+					</tr>
+				{{/ }}
+			{{/ modifierGroupArray}}
+			
+			{{# unselectedDefaultModStrings }}
+				<tr>
+					<td align = "left" colspan = "2">
+						NO {{ unselectedDefaultModStrings }}
+					</td>
+				</tr>
+			{{/ }}
+			
+			{{# exchanged }}
+				<tr>
+					<td align = "left" colspan = "2">[Exchanged]</td>
+				</tr>
+			{{/ }}
+			
+			{{# exchanged }}
+				{{# discount }}
+					{{# discountRule.isDiscountManual }}
+						{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }}
+							<tr>
+								<td align = "left" colspan = "2">&nbsp;&nbsp;{{ discountReason }}</td>
+							</tr>
+						{{/ }}
+						{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }}
+							<tr>
+								<td align = "left" colspan = "2">&nbsp;&nbsp;Discount:</td>
+							</tr>
+						{{/ }}
+					{{^ }}
+						{{# isEqual(BackendSettings.display_discount_name.enabled,True) }}
+							<tr>
+								<td align = "left" colspan = "2">&nbsp;&nbsp;{{ discountRule.name }}</td>
+							</tr>
+						{{/ }}
+						{{# isEqual(BackendSettings.display_discount_name.enabled,False) }}
+							<tr>
+								<td align = "left" colspan = "2">&nbsp;&nbsp;Discount:</td>
+							</tr>
+						{{/ }}
+					{{/ }}
+					<tr>
+						<td align = "left" colspan="2"><br/></td>
+					</tr>
+				{{/ }}
+			{{/ }}
+			
+			{{# appliedServiceFees }}
+				<tr>
+					<td class="left">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}
+					</td>
+					<td class="right">
+						{{# shortFloatString }}{{ totalAmount }}{{/ }}
+					</td>
+				</tr>
+			{{/ }}
+			
+			{{# discount }}
+				<tr>
+					<td class="left">
+						{{# discountRule.isDiscountManual }}
+							{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }}
+								&nbsp;&nbsp;{{ discountReason }}
+							{{/ }}
+							{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }}
+								&nbsp;&nbsp;Discount:
+							{{/ }}
+						{{^ }}
+							{{# isEqual(BackendSettings.display_discount_name.enabled,True) }}
+								&nbsp;&nbsp;{{ discountRule.name }}
+							{{/ }}
+							{{# isEqual(BackendSettings.display_discount_name.enabled,False) }}
+								&nbsp;&nbsp;Discount:
+							{{/ }}
+						{{/ }}
+					</td>
+					<td class="right">
+						-{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ discount }}, {{ qty }} {{/ }}{{/ }}
+					</td>
+				</tr>
+			{{/ }}
+			
+			{{# isEqual(BackendSettings.CRV.enabled,True) }}
+				{{# crvValue }}
+					<tr>
+						<td class="left">CRV Label</td>
+						<td class="right">{{# shortFloatString }}{{# multiply }}{{ crvValue }}, {{ qty }}{{/ }}{{/ }}</td>
+					</tr>
+				{{/ }}
+			{{/ }}
+			
+			{{# comboItemsCopy }}
+				<tr>
+					<td class="left">
+						{{# isRelatedToCombo }}&nbsp;&nbsp;{{/ isRelatedToCombo }}
+						{{ itemName }}
+					</td>
+					<td class="right">
+						{{# isQuantityOne }}
+							{{# payment }}
+								{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }}
+							{{^ }}
+								{{# isFinalReceipt}}
+									{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }}
+								{{^ }}
+									{{ currencySymbol }}{{# shortFloatString }}{{ priceWithModifiers }}{{/ }}
+								{{/ }}
+							{{/ }}
+						{{^ }}
+							{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }}
+						{{/ }}
+					</td>
+				</tr>
+				
+				{{^ isQuantityOne}}
+					<tr>
+						<td align = "left" colspan = "2">
+							&nbsp;&nbsp;{{ currencySymbol }}{{# shortFloatString }}{{ itemIndividualPrice }}{{/ }} each
+						</td>
+					</tr>
+				{{/ }}
+				
+				{{# product.soldByWeight }}
+					<tr>
+						<td align = "left" colspan = "2">
+							{{ weight }}
+						</td>
+					</tr>
+					{{# isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }}
+						<tr>
+							<td align = "left" colspan = "2">
+								MAN
+							</td>
+						</tr>
+					{{/ isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }}
+				{{/ product.soldByWeight }}
+				
+				{{# isEqual(receipt_print_description.enabled,True) }}
+					{{# product.productDescription }}
+						<tr>
+							<td align = "left" colspan = "2">
+								&nbsp;&nbsp;{{ product.productDescription }}
+							</td>
+						</tr>
+					{{/ }}
+				{{/ }}
+				
+				{{# serialNumber }}
+					<tr>
+						<td align = "left" colspan = "2">
+							{{ serialNumber }}
+						</td>
+					</tr>
+				{{/ }}
+				
+				{{# modifierGroupArray }}
+					{{# isEqual(type, ItemSplitType.FirstHalf) }}
+						<tr>
+							<td align = "center" colspan = "2">First Half</td>
+						</tr>
+					{{/ }}
+					{{# isEqual(type, ItemSplitType.SecondHalf) }}
+						<tr>
+							<td align = "center" colspan = "2">Second Half</td>
+						</tr>
+					{{/ }}
+					{{# modItems }}
+						<tr>
+							<td class="left">
+								&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}
+							</td>
+							<td class="right">
+								{{^ isEqual(price, ##String##+$0.00##) }}{{ price }}&nbsp;&nbsp;{{/ }}
+							</td>
+						</tr>
+					{{/ }}
+				{{/ modifierGroupArray}}
+				
+				{{# unselectedDefaultModStrings }}
+					<tr>
+						<td align = "left" colspan = "2">
+							NO {{ unselectedDefaultModStrings }}
+						</td>
+					</tr>
+				{{/ }}
+				
+				{{# exchanged }}
+					<tr>
+						<td align = "left" colspan = "2">[Exchanged]</td>
+					</tr>
+				{{/ }}
+				
+				{{# exchanged }}
+					{{# discount }}
+						{{# discountRule.isDiscountManual }}
+							{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }}
+								<tr>
+									<td align = "left" colspan = "2">&nbsp;&nbsp;{{ discountReason }}</td>
+								</tr>
+							{{/ }}
+							{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }}
+								<tr>
+									<td align = "left" colspan = "2">&nbsp;&nbsp;Discount:</td>
+								</tr>
+							{{/ }}
+						{{^ }}
+							{{# isEqual(BackendSettings.display_discount_name.enabled,True) }}
+								<tr>
+									<td align = "left" colspan = "2">&nbsp;&nbsp;{{ discountRule.name }}</td>
+								</tr>
+							{{/ }}
+							{{# isEqual(BackendSettings.display_discount_name.enabled,False) }}
+								<tr>
+									<td align = "left" colspan = "2">&nbsp;&nbsp;Discount:</td>
+								</tr>
+							{{/ }}
+						{{/ }}
+						<tr>
+							<td align = "left" colspan="2"><br/></td>
+						</tr>
+					{{/ }}
+				{{/ }}
+				
+				{{# appliedServiceFees }}
+					<tr>
+						<td class="left">
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ name }}
+						</td>
+						<td class="right">
+							{{# shortFloatString }}{{ totalAmount }}{{/ }}
+						</td>
+					</tr>
+				{{/ }}
+				
+				{{# discount }}
+					<tr>
+						<td class="left">
+							{{# discountRule.isDiscountManual }}
+								{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }}
+									&nbsp;&nbsp;{{ discountReason }}
+								{{/ }}
+								{{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }}
+									&nbsp;&nbsp;Discount:
+								{{/ }}
+							{{^ }}
+								{{# isEqual(BackendSettings.display_discount_name.enabled,True) }}
+									&nbsp;&nbsp;{{ discountRule.name }}
+								{{/ }}
+								{{# isEqual(BackendSettings.display_discount_name.enabled,False) }}
+									&nbsp;&nbsp;Discount:
+								{{/ }}
+							{{/ }}
+						</td>
+						<td class="right">
+							-{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ discount }}, {{ qty }} {{/ }}{{/ }}
+						</td>
+					</tr>
+				{{/ }}
+				
+				{{# isEqual(BackendSettings.CRV.enabled,True) }}
+					{{# crvValue }}
+						<tr>
+							<td class="left">CRV Label</td>
+							<td class="right">{{# shortFloatString }}{{# multiply }}{{ crvValue }}, {{ qty }}{{/ }}{{/ }}</td>
+						</tr>
+					{{/ }}
+				{{/ }}
+				
+			{{/ comboItemsCopy }}
+		
+		{{/ itemsToDisplay }}
+		
+		<tr>
+			<td colspan = "2" style="border-bottom: 3px solid black;"><br/></td>
+		</tr>
+		<tr>
+			<td class="left">Total Before Vat:</td>
+			<td class="right">{{# currencyString }}{{# divide }}{{ order.total }}, 1.05{{/ divide }}{{/ currencyString }}</td>
+		</tr>
+		
+		{{# bill.appliedServiceFees }}
+			<tr>
+				<td class="left">{{ name }}:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{totalAmount}}{{/ }}</td>
+			</tr>
+		{{/ }}
+		
+		{{# bill.serviceSurcharge }}
+			<tr>
+				<td class="left">Service Charge:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{bill.serviceSurcharge}}{{/ }}</td>
+			</tr>
+		{{/ }}
+		
+		{{# order.discountTotal }}
+			<tr>
+				<td class="left">Discount:</td>
+				<td class="right">-{{ currencySymbol }}{{# shortFloatString }}{{ order.discountTotal }}{{/ }}</td>
+			</tr>
+		{{/ order.discountTotal }}
+		
+		{{# order.prevailingSurcharge }}
+			<tr>
+				<td class="left">Custom Surcharge:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ bill.surcharge }}{{/ }}</td>
+			</tr>
+		{{/ }}
+		
+		<tr>
+			<td class="left">VAT Incl.:</td>
+			<td class="right">{{# currencyString }}{{# multiply }}{{# divide }}{{ order.total }}, 1.05{{/ divide }}, 0.05{{/ multiply }}{{/ currencyString }}</td>
+		</tr>
+		
+		{{# isEqual(BackendSettings.print_rounding_delta_on_receipt.enabled,True) }}
+			{{# payment.roundingDelta }}
+				<tr>
+					<td class="left">Rounding Delta</td>
+					<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.roundingDelta }}{{/ }}</td>
+				</tr>
+			{{/ }}
+		{{/ }}
+		
+		{{# isEqual(BackendSettings.CRV.enabled,True) }}
+			{{# order.crvValue }}
+				<tr>
+					<td class="left">Redmp Val:</td>
+					<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ order.crvValue }}{{/ }}</td>
+				</tr>
+			{{/ }}
+		{{/ }}
+		
+		<tr style="border-top: 3px solid black;">
+			<td align = "left" style="font-weight: bold;">Total:</td>
+			<td align = "right" style="font-weight: bold;">{{ currencySymbol }}{{# shortFloatString }}{{ order.total }}{{/ }}</td>
+		</tr>
+		
+		{{# totalOutstanding}}
+			<tr>
+				<td class="left">Total Outstanding:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }} {{ totalOutstanding }}{{/ }}</td>
+			</tr>
+		{{/ }}
+		
+		{{# bill.gratuity}}
+			<tr>
+				<td class="left">Service Charge {{# shortFloatString }}{{ bill.gratuityPercent }}{{/ }}%:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ bill.gratuity }}{{/ }}</td>
+			</tr>
+			<tr>
+				<td class="left">Sum Total:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{ bill.total }}, {{ bill.gratuity }} {{/ }}{{/ }}</td>
+			</tr>
+		{{/ }}
+		
+		{{# order.currencyRate}}
+			<tr>
+				<td class="left">Currency Name Rate:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ order.currencyRate }}{{/ }}</td>
+			</tr>
+			<tr>
+				<td class="left">Sum Total:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{ bill.total }}, {{ bill.gratuity }} {{/ }}{{/ }}</td>
+			</tr>
+		{{/ }}
+		
+		{{# order.exchangedAmount }}
+			<tr>
+				<td class="left">Exchanged Items:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ order.exchangedAmount }}{{/ }}</td>
+			</tr>
+			<tr>
+				<td class="left">Remaining Total:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ order.total }}, -{{ order.exchangedAmount }} {{/ }}{{/ }}</td>
+			</tr>
+		{{/ }}
+		
+		{{# evenOrOddBill }}
+			<tr>
+				<td class="left">Receipt Total:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ evenOrOddBill.total }}{{/ }}</td>
+			</tr>
+			{{# evenOrOddBill.gratuity }}
+				<tr>
+					<td class="left">Receipt Service Charge {{# shortFloatString }}{{ evenOrOddBill.gratuityPercent }}{{/ }}%:</td>
+					<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ evenOrOddBill.gratuity }}{{/ }}</td>
+				</tr>
+				<tr>
+					<td class="left">Receipt Sum Total:</td>
+					<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ evenOrOddBill.total }}, evenOrOddBill.gratuity }}{{/ }}{{/ }}</td>
+				</tr>
+			{{/ }}
+		{{/ }}
+		
+		{{! Print credit card info }}
+		{{# isCreditReceipt }}
+			<tr>
+				<td class="left">
+					{{# isEqual(payment.type, PaymentType.EBTFoodstamp) }}
+						Paid With: EBT Foodstamp
+					{{^ }}
+						{{# isEqual(payment.type, PaymentType.EBTCash) }}
+							Paid With: EBT Cash
+						{{^ }}
+							{{# isEqual(payment.type, PaymentType.Custom) }}
+							Paid With: {{ payment.title }}
+							{{/ }}	
+						{{/ }}
+					{{/ }}
+				</td>
+				<td class="rightt">
+					{{# isEqual(payment.type, PaymentType.Custom) }}
+					{{^}}
+						{{ payment.maskedNumber }}
+					{{/ isEqual(payment.type, PaymentType.Custom) }}
+				</td>
+			</tr>
+			
+			{{# payment.fullName }}
+				<tr>
+					<td class="left">Bill:</td>
+					<td class="right">{{ payment.fullName }}</td>
+				</tr>
+			{{/ payment.fullName }}
+			
+			{{# payment.balance }}
+				<tr>
+					<td class="left">Balance:</td>
+					<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.balance }}{{/ }}</td>
+				</tr>
+			{{/ payment.balance }}
+			
+			<tr>
+				<td class="left">Total:</td>
+				<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.amount }}{{/ }}</td>
+			</tr>
+		{{/ isCreditReceipt }}
+		
+		{{# order }}
+			{{# isCreditReceipt }}
+				{{# payment.gratuity }}
+					<tr>
+						<td class="left">Service Charge {{ order.gratuityPercent }}%:</td>
+						<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ gratuity }}{{/ shortFloatString }}</td>
+					</tr>
+					<tr>
+						<td class="left">Sum Total:</td>
+						<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ payment.amount }}, {{ payment.gratuity }}{{/ sum }}{{/ shortFloatString }}</td>
+					</tr>
+					<tr>
+						<td align = "left" colspan="2"><br/></td>
+					</tr>
+				{{/ payment.gratuity }}
+				
+				<tr>
+					<td align = "left" colspan="2"><br/></td>
+				</tr>
+				
+				{{# payment.tipAmountWithoutGratuity }}
+					{{# payment.tip }}
+						<tr>
+							<td class="left">Tip:</td>
+							<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}</td>
+						</tr>
+						<tr>
+							<td class="left">Total:</td>
+							<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ payment.amountPaidWithTips }}{{/ sum }}{{/ shortFloatString }}</td>
+						</tr>
+					{{/ payment.tip }}
+				{{^ }}
+					{{# isEqual(BackendSettings.print_tip_line.enabled,True)}}
+						<tr>
+							<td align = "left" colspan="2"><br/></td>
+						</tr>
+						<tr>
+							<td colspan="2"><table width="100%"><td align="left">Tip:</td><td align="right">{{ currencySymbol }}____________.____</td></table></td>
+						</tr>
+						<tr>
+							<td align = "left" colspan="2"><br/></td>
+						</tr>
+						<tr>
+							<td colspan="2"><table width="100%"><td align="left">Total:</td><td align="right">{{ currencySymbol }}____________.____</td></table></td>
+						</tr>
+						<tr>
+							<td align = "left" colspan="2"><br/></td>
+						</tr>
+						<tr>
+							<td align = "left" colspan="2"><br/></td>
+						</tr>
+						<tr>
+							<td align = "left" colspan="2"><br/></td>
+						</tr>
+						<tr>
+							<td class="left" colspan="2" style="overflow: hidden">__________________________________________</td>
+						</tr>
+						<tr>
+							<td align = "center" colspan = "2">Signature</td>
+						</tr>
+					{{/ }}
+				{{/ payment.tipAmountWithoutGratuity }}
+				
+				{{^ omitSignature }}
+					{{# isEqual(payment.type, PaymentType.Debit) }}
+						<tr>
+							<td colspan = "2" align = "center">No Signature Required</td>
+						</tr>
+					{{^ }}
+						{{# isEqual(payment.type, PaymentType.EBTFoodstamp) }}
+							<tr>
+								<td colspan = "2" align = "center">No Signature Required</td>
+							</tr>
+						{{^ }}
+							{{# isEqual(payment.type, PaymentType.EBTCash) }}
+								<tr>
+									<td colspan = "2" align = "center">No Signature Required</td>
+								</tr>
+							{{^ }}
+								{{# merchantCopy}}
+									<tr>
+										<td align = "left" colspan="2"><br/></td>
+									</tr>
+									<tr>
+										<td class="left" colspan="2" style="overflow: hidden">__________________________________________</td>
+									</tr>
+									<tr>
+										<td align = "center" colspan = "2">Signature</td>
+									</tr>
+									<tr>
+										<td align = "left" colspan="2"><br/></td>
+									</tr>
+									<tr>
+										<td align = "left" colspan="2"><br/></td>
+									</tr>
+								{{/ merchantCopy}}
+								<tr>
+									<td align = "left" colspan="2"><br/></td>
+								</tr>
+								<tr>
+									<td colspan = "2" align = "center">APPROVED</td>
+								</tr>
+								<tr>
+									<td align = "left" colspan="2"><br/></td>
+								</tr>
+								<tr>
+									<td align = "left" colspan="2"><br/></td>
+								</tr>
+								<tr>
+									<td align = "center" colspan="2">I agree to pay the above total amount</td>
+								</tr>
+								<tr>
+									<td align = "center" colspan="2">according to card issuer agreement</td>
+								</tr>
+							{{/ }}
+						{{/ }}
+					{{/ }}
+				{{/ omitSignature }}
+			{{^ }}
+				{{# payment }}
+					{{# isEqual(payment.type, PaymentType.Gift) }}
+						<tr>
+							<td class="left">Gift Card Number:</td>
+							<td class="right">{{# payment.number }}{{ payment.number }}{{^ }}Unknown{{/ }}</td>
+						</tr>
+					{{/ }}
+					{{# order.giftRewardDataObject }}
+						{{# gift_balance }}
+							<tr>
+								<td class="left">Card Balance:</td>
+								<td class="right">{{ gift_balance }}</td>
+							</tr>
+							<tr>
+								<td align = "left" colspan="2"><br/></td>
+							</tr>
+						{{/ }}
+						{{# gift_auth_number }}
+							<tr>
+								<td class="left">Auth Number:</td>
+								<td class="right">{{ gift_auth_number }}</td>
+							</tr>
+							<tr>
+								<td align = "left" colspan="2"><br/></td>
+							</tr>
+						{{/ }}
+						{{# sale_amount }}
+							<tr>
+								<td class="left">Sale amount:</td>
+								<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ sale_amount }}{{/ shortFloatString }}</td>
+							</tr>
+							<tr>
+								<td align = "left" colspan="2"><br/></td>
+							</tr>
+						{{/ }}
+						{{# balance_used }}
+							<tr>
+								<td class="left">Used:</td>
+								<td class="right">{{ balance_used }}</td>
+							</tr>
+						{{/ }}
+						{{# balance_due }}
+							<tr>
+								<td class="left">Balance Due:</td>
+								<td class="right">{{ balance_due }}</td>
+							</tr>
+						{{/ }}
+					{{^ }}
+						{{^ isEqual(order.posMode, PosMode.Retail)}}
+							{{^ isEqual(order.posMode, PosMode.Grocery)}}
+								{{^ isEqual(order.posMode, PosMode.Kiosk)}}
+									{{# payment.tipAmountWithoutGratuity }}
+										<tr>
+											<td class="left">Tip</td>
+											<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}</td>
+										</tr>
+									{{^ }}
+										{{# isEqual(payment.type, PaymentType.PayPal) }}
+											<tr>
+												<td class="left">Tip</td>
+												<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}</td>
+											</tr>
+										{{/ }}
+										{{# isEqual(payment.type, PaymentType.Zapper) }}
+											<tr>
+												<td class="left">Tip</td>
+												<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}</td>
+											</tr>
+										{{/ }}
+										{{# isEqual(payment.type, PaymentType.SSMC) }}
+											<tr>
+												<td class="left">Tip</td>
+												<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}</td>
+											</tr>
+										{{/ }}
+									{{/ }}
+								{{/ }}
+							{{/ }}
+						{{/ }}
+						
+						<tr>
+							<td class="left">
+								{{# isEqual(payment.type, PaymentType.CreditPlus) }}
+									Customer Paid Card {{ payment.cardTypeName }}
+								{{^ }}
+									{{# isEqual(payment.type, PaymentType.Cash) }}
+										Customer Paid Cash:
+									{{^ }}
+										{{# isEqual(payment.type, PaymentType.Check) }}
+											Customer Paid Check {{ payment.number }}:
+										{{^ }}
+											{{# isEqual(payment.type, PaymentType.PayPal) }}
+												Customer Paid PayPal:
+											{{^ }}
+												{{# isEqual(payment.type, PaymentType.Zapper) }}
+													Customer Paid Zapper:
+												{{^ }}
+													{{# isEqual(payment.type, PaymentType.SSMC) }}
+														Customer Paid SSMC:
+													{{^ }}
+														{{# isEqual(payment.type, number108) }}
+															{{# payment.titleForReceipt }}Customer Paid {{ . }}:{{^ }}Custom:{{/ }}
+														{{/ }}
+													{{/ }}
+												{{/ }}
+											{{/ }}
+										{{/ }}
+									{{/ }}
+								{{/ }}
+							</td>
+							<td class="right">
+								{{ currencySymbol }}{{# shortFloatString }}{{ payment.amountPaidWithTips }}{{/ shortFloatString }}
+							</td>
+						</tr>
+						
+						{{# isEqual(type, PaymentType.Cash) }}
+							<tr>
+								<td class="left">Customer Change:</td>
+								<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ change }}{{/ shortFloatString }}</td>
+							</tr>
+							<tr>
+								<td align = "left" colspan="2"><br/></td>
+							</tr>
+						{{/ }}
+						{{# isEqual(payment.type, PaymentType.Gift) }}
+							<tr>
+								<td class="left">Card Balance:</td>
+								<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ payment.balance }}{{/ shortFloatString }}</td>
+							</tr>
+							<tr>
+								<td align = "left" colspan="2"><br/></td>
+							</tr>
+						{{/ }}
+					{{/ }}
+				{{^ }}
+					{{# isFinalReceipt }}
+						{{# paymentsSummaryForBill(billNumber) }}
+							{{# payments }}
+								<tr>
+									<td class="left">
+										{{# isEqual(type, PaymentType.Cash) }}
+											Cash:
+										{{^ }}
+											{{# isEqual(type, PaymentType.Check) }}
+												Check:
+											{{^ }}
+												{{# isEqual(type, PaymentType.Credit) }}
+													Credit:
+												{{^ }}
+													{{# isEqual(type, PaymentType.CreditManual) }}
+														Credit:
+													{{^ }}
+														{{# isEqual(type, PaymentType.CreditPlus) }}
+															Credit+:
+														{{^ }}
+															{{# isEqual(type, PaymentType.Gift) }}
+																Gift:
+															{{^ }}
+																{{# isEqual(type, PaymentType.PayPal) }}
+																	PayPal:
+																{{^ }}
+																	{{# isEqual(type, PaymentType.Index) }}
+																		Index:
+																	{{^ }}
+																		{{# isEqual(type, PaymentType.Zapper) }}
+																			Zapper:
+																		{{^ }}
+																			{{# isEqual(type, PaymentType.SSMC) }}
+																				SSMC:
+																			{{^ }}
+																				{{# isEqual(type, number108) }}
+																					{{# .titleForReceipt }}{{ . }}:{{^ }}Custom:{{/ }}
+																				{{/ }}
+																			{{/ }}
+																		{{/ }}
+																	{{/ }}
+																{{/ }}
+															{{/ }}
+														{{/ }}
+													{{/ }}
+												{{/ }}
+											{{/ }}
+										{{/ }}
+									</td>
+									<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ amount }}{{/ shortFloatString }}</td>
+								</tr>
+								{{# isEqual(type, PaymentType.Cash) }}
+								<tr>
+									<td class="left">Customer Change:</td>
+									<td class="right">{{# shortFloatString }}{{ change }}{{/ shortFloatString }}{{ currencySymbol }}</td>
+								</tr>
+								<tr>
+									<td align = "left" colspan="2"><br/></td>
+								</tr>
+								{{/ }}
+								<tr>
+									<td align = "left" colspan="2"><br/></td>
+								</tr>
+							{{/ payments }}
+							{{^ isEqual(order.posMode, PosMode.Retail)}}
+								{{^ isEqual(order.posMode, PosMode.Grocery)}}
+									{{^ isEqual(order.posMode, PosMode.Kiosk)}}
+										<tr>
+											<td class="left">Tip:</td>
+											<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ tipWithoutGratuity }}{{/ shortFloatString }}</td>
+										</tr>
+									{{/ }}
+								{{/ }}
+							{{/ }}
+							{{# gratuity }}
+								<tr>
+									<td class="left">Service Charge {{ order.gratuityPercent }}%:</td>
+									<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ gratuity }}{{/ shortFloatString }}</td>
+								</tr>
+							{{/ gratuity }}
+							<tr>
+								<td class="left">Total:</td>
+								<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ amountWithTips }}{{/ shortFloatString }}</td>
+							</tr>
+							<tr>
+								<td align = "left" colspan="2"><br/></td>
+							</tr>
+							{{# order.invoiceDate }}
+								{{# order.appliedDeposit }}
+									<tr>
+										<td class="left">Applied Deposit:</td>
+										<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ order.appliedDeposit }}{{/ shortFloatString }}</td>
+									</tr>
+									<tr>
+										<td align = "left" colspan="2"><br/></td>
+									</tr>
+								{{/ order.appliedDeposit }}
+							{{/ order.invoiceDate }}
+						{{/ }}
+					{{/ isFinalReceipt }}
+				{{/ payment }}
+			{{/ }}
+			
+			{{# order.totalBalanceDue }}
+				{{# isEqual(order.splitBillType, SplitType.None) }}
+					<tr>
+						<td class="left">
+							{{# order.invoice }}
+								Invoice Balance Due:
+							{{^ }}
+								Order Balance Due:
+							{{/ order.invoice }}
+						</td>
+						<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ order.totalBalanceDue }}{{/ shortFloatString }}</td>
+					</tr>
+				{{/ }}
+				{{# isGuestCheck }}
+					{{# isEqual(BackendSettings.enable_currency_conversion.enabled,True) }}
+						<tr>
+							<td align = "center" colspan = "2">Currencies:</td>
+						</tr>
+						<tr>
+							<td class="left">
+								{{ BackendSettings.currency_name.parameter_value }}:
+							</td>
+							<td class="right">
+								{{ BackendSettings.currency.parameter_value }}{{# shortFloatString }}{{ order.totalBalanceDue }}{{/ shortFloatString }}
+							</td>
+						</tr>
+						{{# BackendSettings.currency_1.parsed_parameter_value }}
+							<tr>
+								<td class="left">
+									{{ name }}:
+								</td>
+								<td class="right">
+									{{ BackendSettings.currency_1.parsed_parameter_value.symbol }}{{# shortFloatString }}{{# multiply }}{{ order.totalBalanceDue }}, {{ BackendSettings.currency_1.parsed_parameter_value.rate }}{{/ multiply}}{{/ shortFloatString }}
+								</td>
+							</tr>
+						{{/ }}
+						{{# BackendSettings.currency_2.parsed_parameter_value }}
+							<tr>
+								<td class="left">
+									{{ name }}:
+								</td>
+								<td class="right">
+									{{ BackendSettings.currency_2.parsed_parameter_value.symbol }}{{# shortFloatString }}{{# multiply }}{{ order.totalBalanceDue }}, {{ BackendSettings.currency_2.parsed_parameter_value.rate }}{{/ multiply}}{{/ shortFloatString }}
+								</td>
+							</tr>
+						{{/ }}
+						{{# BackendSettings.currency_3.parsed_parameter_value }}
+							<tr>
+								<td class="left">
+									{{ name }}:
+								</td>
+								<td class="right">
+									{{ BackendSettings.currency_3.parsed_parameter_value.symbol }}{{# shortFloatString }}{{# multiply }}{{ order.totalBalanceDue }}, {{ BackendSettings.currency_3.parsed_parameter_value.rate }}{{/ multiply}}{{/ shortFloatString }}
+								</td>
+							</tr>
+						{{/ }}
+					{{/ }}
+				{{/ isGuestCheck }}
+				{{# isEqual(BackendSettings.print_tip_lines_on_guest_check.enabled,True)}}
+					<tr>
+						<td align = "left" colspan="2"><br></td>
+					</tr>
+					<tr>
+						<td colspan="2"><table width="100%"><td align="left">Tip:</td><td align="right">{{ currencySymbol }}____________.____</td></table></td>
+					</tr>
+					<tr>
+						<td align = "left" colspan="2"><br></td>
+					</tr>
+					<tr>
+						<td colspan="2"><table width="100%"><td align="left">Total:</td><td align="right">{{ currencySymbol }}____________.____</td></table></td>
+					</tr>
+					<tr>
+						<td align = "left" colspan="2"><br></td>
+					</tr>
+					<tr>
+						<td align = "left" colspan="2"><br></td>
+					</tr>
+					<tr>
+						<td align = "left" colspan="2"><br></td>
+					</tr>
+					<tr>
+						<td class="left" colspan="2" style="overflow: hidden">__________________________________________</td>
+					</tr>
+					<tr>
+						<td align = "center" colspan = "2">Signature</td>
+					</tr>
+				{{/ }}
+			{{/ order.totalBalanceDue }}
+			
+			{{# isEqual(BackendSettings.print_tax_id.enabled,True) }}
+			{{^ hasBit(printOptions, PrintOptions.NoTax) }}
+			{{# BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }}
+				<tr>
+					<td class="left">{{ BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }}:</td>
+					<td class="right">{{ BackendSettings.print_tax_id.parsed_parameter_value.tax_id }}</td>
+				</tr>
+			{{^ BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }}
+				<tr>
+					<td class="left">{{ lsMsgRcp(##String##MsgReceiptVatNumber##) }}:</td>
+					<td class="right">{{ BackendSettings.print_tax_id.parsed_parameter_value.tax_id }}</td>
+				</tr>
+			{{/ BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }}
+			{{/ hasBit(printOptions, PrintOptions.NoTax) }}
+			{{/ isEqual(BackendSettings.print_tax_id.enabled,True) }}
+			
+			{{# isEqual(BackendSettings.display_total_savings_on_receipts.enabled,True) }}
+				{{# order.discountTotal }}
+					<tr>
+						<td align = "center" colspan = "2">
+							You saved: {{ currencySymbol }}
+							{{# billNumber }}
+								{{# isEqual(order.splitBillType, SplitType.BySeat) }}
+									{{ bill.discountTotal }}
+								{{/ }}
+								{{# isEqual(order.splitBillType, SplitType.ByItem) }}
+									{{ bill.discountTotal }}
+								{{/ }}
+							{{^ }}
+								{{ order.discountTotal }}
+							{{/ billNumber}}
+						</td>
+					</tr>
+					<tr>
+						<td align = "left" colspan="2"><br></td>
+					</tr>
+				{{/ order.discountTotal }}
+			{{/ }}
+			
+			{{# isEqual(BackendSettings.include_tax_breakdown_on_the_receipt.enabled,True) }}
+				<tr style="border-bottom: 3px solid black;">
+					<td align = "center" colspan = "2" style="font-weight: bold;"><b>Tax Breakdown</b></td>
+				</tr>
+				<tr style="border-bottom: 3px solid black;">
+					<td class="left">Rate</td>
+					<td class="right">Total</td>
+				</tr>
+				{{# order.taxArray }}
+					<tr>
+						<td class="left">
+							{{# name }}
+								{{ name }}
+							{{^ }}
+								Untaxed
+							{{/ name }}
+							&nbsp;
+							[{{ currencySymbol }}{{# shortFloatString }}{{ taxableAmount}}{{/ shortFloatString }}@{{# shortFloatString }}{{ rate }}{{/ shortFloatString }}%]
+						</td>
+						<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ taxAmount }}{{/ shortFloatString }}</td>
+					</tr>
+				{{/ order.taxArray }}
+				{{# order.prevailingSurcharge }}
+					<tr>
+						<td class="left">
+							Surcharge
+							&nbsp;
+							[{{ currencySymbol }}{{# shortFloatString }}{{ order.subtotalForSurcharge }}{{/ shortFloatString }}@{{# shortFloatString }}{{ order.prevailingSurcharge }}{{/ shortFloatString }}%]
+						</td>
+						<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ order.surcharge }}{{/ shortFloatString }}</td>
+					</tr>
+				{{/ order.prevailingSurcharge }}
+				{{# order.taxRebate }}
+					<tr>
+						<td class="left">
+							Tax Rebate
+							&nbsp;
+							[{{ currencySymbol }}{{# shortFloatString }}{{ order.amountForRebate }}{{/ shortFloatString }}@{{# shortFloatString }}{{ order.taxRebatePercent }}{{/ shortFloatString }}%]
+						</td>
+						<td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ order.taxRebate }}{{/ shortFloatString }}</td>
+					</tr>
+				{{/ order.taxRebate }}
+			{{/ }}
+			
+			
+			
+			{{^ isEqual(order.diningOption, number1) }}
+				{{^ isEqual(order.diningOption, number0) }}
+					{{# customer }}
+						<tr>
+							<td colspan = "2" style="border-top: 3px solid black;"><br/></td>
+						</tr>
+						<tr>
+							<td align = "left" colspan = "2">Deliver To:</td>
+						</tr>
+						<tr>
+							<td align = "left" colspan = "2"><br></td>
+						</tr>
+						{{# customer.name }}
+							<tr>
+								<td align = "left" colspan = "2">{{ customer.fullName }}</td>
+							</tr>
+						{{/ customer.name }}
+						<tr>
+							<td align = "left" colspan = "2">{{ customer.shippingAddress.streetAddress }}</td>
+						</tr>
+						{{# customer.shippingAddress.city }}
+							{{# customer.shippingAddress.zipCode}}
+								<tr>
+									<td align = "left" colspan = "2">{{ customer.shippingAddress.city }}, {{ customer.shippingAddress.zipCode }}</td>
+								</tr>
+							{{^ }}
+								<tr>
+									<td align = "left" colspan = "2">{{ customer.shippingAddress.city }}</td>
+								</tr>
+							{{/ customer.shippingAddress.zipCode}}
+						{{^ }}
+							{{# customer.shippingAddress.zipCode}}
+								<tr>
+									<td align = "left" colspan = "2">{{ customer.shippingAddress.zipCode }}</td>
+								</tr>
+							{{/ customer.shippingAddress.zipCode}}
+						{{/ customer.shippingAddress.city }}
+						{{# customer.shippingAddress.phoneNumber }}
+							<tr>
+								<td align = "left" colspan = "2">{{ customer.shippingAddress.phoneNumber }}</td>
+							</tr>
+						{{^ }}
+							<tr>
+								<td align = "left" colspan = "2">{{ customer.phoneNumber }}</td>
+							</tr>
+						{{/ customer.shippingAddress.phoneNumber }}
+						{{# customer.shippingAddress.email }}
+							<tr>
+								<td align = "left" colspan = "2">{{ customer.shippingAddress.email }}</td>
+							</tr>
+						{{^ }}
+							<tr>
+								<td align = "left" colspan = "2">{{ customer.email }}</td>
+							</tr>
+						{{/ customer.shippingAddress.email }}
+					{{/ customer }}
+				{{/ }}
+			{{/ }}
+    {{# dateDue }}
+		<tr>
+				<td colspan = "2" style="border-top: 3px solid black;"><br></td>
+			</tr>
+        <tr>
+            <td align = "left" colspan="2">{{# isEqual(order.diningOption, DiningOption.Deliver) }}
+                Delivery Time:
+                {{^ }}
+                {{# isEqual(order.diningOption, DiningOption.TakeOut) }}
+                Pickup time:
+                {{^ }}
+                Due Date:
+                {{/ }}
+                {{/ }}
+                {{# dateWithFormat(dateDue) }}dd/MM/yy, hh:mm a{{/ }}
+                {{# isEqual(date, dateDue) }}
+                ASAP
+                {{/ }}</td>
+        </tr>
+    {{/ dateDue }}
+    {{# order.notes }}
+		<tr>
+			<td colspan = "2" style="border-top: 3px solid black;"><br></td>
+		</tr>
+        <tr>
+            <td align = "center" colspan = "2">Notes:</td>
+        </tr>
+		<tr>
+			<td colspan = "2" style="border-bottom: 3px solid black;"><br></td>
+		</tr>
+        <tr>
+            <td align = "left" colspan="2">{{ order.notes }}</td>
+        </tr>
+    {{/ order.notes }}
+{{/ order }}
+            
+    {{# order.gratuity }}
+        <tr>
+            <td align = "center" colspan = "2">**** Service Charge Included ****</td>
+        </tr>
+    {{/ order.gratuity }}
+        {{# order.giftRewardDataObject }}
+    {{# isEqualAnd(isEmpty(reward_add_auth_number), True, isEmpty(reward_auth_number), True, isEmpty(reward_auth_number), True) }}
+    {{# current_points }}
+        <tr>
+            <td class="left">Point balance: </td>
+            <td class="right">{{ current_points }}</td>
+        </tr>
+    {{/ current_points }}    
+    {{^ isEqualAnd(isEmpty(reward_add_auth_number), True, isEmpty(reward_auth_number), True, isEmpty(reward_auth_number), True) }}
+        <tr>
+            <td colspan = "2" style="border-top: 3px solid black;"><br></td>
+        </tr>
+         <tr>
+            <td align = "center" colspan = "2">Reward:</td>
+        </tr>
+        {{# reward_card_number }}
+                <tr>
+                    <td class="left">Reward Card Number:</td>
+                    <td class="right">{{ reward_card_number }}</td>
+                </tr>
+        {{^ }}
+            <tr>
+                    <td class="left">Reward Card Number:</td>
+                    <td class="right">Unknown</td>
+                </tr>
+        {{/ }}
+        {{# reward_redeem_auth_number }}
+                <tr>
+                    <td class="left">Redeem Auth Number:</td>
+                    <td class="right">{{ reward_redeem_auth_number }}</td>
+                </tr>
+            {{/ }}
+            {{# reward_auth_number }}
+                <tr>
+                    <td class="left">Auth Number:</td>
+                    <td class="right">{{ reward_auth_number }}</td>
+                </tr>
+            {{/ }}
+            {{# reward }}
+                <tr>
+                    <td class="left">Reward:</td>
+                    <td class="right">{{ reward }}</td>
+                </tr>
+            {{/ }}
+            {{# coupon_amount }}
+                <tr>
+                    <td class="left">Coupon Amount:</td>
+                    <td class="right">{{ coupon_amount }}</td>
+                </tr>
+            {{/ }}
+            {{# coupon_used }}
+                <tr>
+                    <td class="left">Coupon Used:</td>
+                    <td class="right">{{ coupon_used }}</td>
+                </tr>
+            {{/ }}
+             {{# reward_used }}
+                <tr>
+                    <td class="left">Reward Used:</td>
+                    <td class="right">{{ reward_used }}</td>
+                </tr>
+            {{/ }}
+            {{# customer_owes }}
+                <tr>
+                    <td class="left">Customer Owes:</td>
+                    <td class="right">{{ customer_owes }}</td>
+                </tr>
+            {{/ }}
+            {{# reward_add_auth_number }}
+                <tr>
+                    <td class="left">Add Auth Number:</td>
+                    <td class="right">{{ reward_add_auth_number }}</td>
+                </tr>
+            {{/ }}
+            {{# points_added }}
+                <tr>
+                    <td class="left">Points Earned:</td>
+                    <td class="right">{{ points_added }}</td>
+                </tr>
+            {{/ }}
+            {{# total_points }}
+                <tr>
+                    <td class="left">Total points:</td>
+                    <td class="right">{{ total_points }}</td>
+                </tr>
+            {{/ }}
+            {{# cash_earned }}
+                <tr>
+                    <td class="left">Cash Earned:</td>
+                    <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ cash_earned }}{{/ shortFloatString }}</td>
+                </tr>
+            {{/ }}
+            {{# isEqual(BackendSettings.show_reward_card_balance_on_receipt.enabled,True) }}
+                {{# reward_balance }}
+                <tr>
+                    <td class="left">Balance:</td>
+                    <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ reward_balance }}{{/ shortFloatString }}</td>
+                </tr>
+                {{/ }}
+            {{/ }}
+            {{# reward_cash_balance }}
+                <tr>
+                    <td class="left">Cash Balance:</td>
+                    <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ reward_cash_balance }}{{/ shortFloatString }}</td>
+                </tr>
+            {{/ }}
+            {{# total_saved }}
+                <tr>
+                    <td class="left">Total Saved:</td>
+                    <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{ total_saved }}{{/ shortFloatString }}</td>
+                </tr>
+            {{/ }}
+            {{# coupon }}
+                <tr>
+                    <td align = "left" colspan="2">{{ coupon }}</td>
+                </tr>
+            {{/ }}
+            {{# isEqual(BackendSettings.print_points_needed_to_redeem_reward.enabled,True) }}
+                {{# points_needed }}
+                    {{# next_reward }}
+                        <tr>
+                            <td align = "left" colspan="2">{{ points_needed }} points needed to receive a {{ currencySymbol }}{{# shortFloatString }}{{ next_reward }}{{/ shortFloatString }} reward</td>
+                        </tr>
+                    {{/ }}
+                {{/ }}
+            {{/ }}
+            {{# custom_message }}
+                <tr>
+                    <td align = "left" colspan="2"><br></td>
+                </tr>
+                <tr>
+                    <td align = "left" colspan="2">{{ custom_message }}</td>
+                </tr>
+            {{/ }}
+    {{/ isEqualAnd(isEmpty(reward_add_auth_number), True, isEmpty(reward_auth_number), True, isEmpty(reward_auth_number), True) }}
+    {{/ order.giftRewardDataObject }}
+		{{# isEqual(BackendSettings.print_signature_line_on_house_account_receipts.enabled,True) }}
+        {{# isEqual(payment.type, PaymentType.CreditPlus) }}
+            {{# isEqual(payment.cardType, CardType.HouseAccount) }}
+                {{^ payment.tip }}
+                    <tr>
+                        <td align = "left" colspan="2"><br></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><table width="100%"><td align="left">Tip:</td><td align="right">{{ currencySymbol }}____________.____</td></table></td>
+                    </tr>
+                    <tr>
+                        <td align = "left" colspan="2"><br></td>
+                    </tr>
+                    <tr>
+					<td colspan="2"><table width="100%"><td align="left">Total:</td><td align="right">{{ currencySymbol }}____________.____</td></table></td>
+                    </tr>
+                    <tr>
+                        <td align = "left" colspan="2"><br></td>
+                    </tr>
+                    <tr>
+                        <td align = "left" colspan="2"><br></td>
+                    </tr>
+                    <tr>
+                        <td align = "left" colspan="2"><br></td>
+                    </tr>
+                    <tr>
+                        <td class="left" colspan="2" style="overflow: hidden">__________________________________________</td>
+                    </tr>
+                    <tr>
+                        <td align = "center" colspan = "2">Signature</td>
+                    </tr>
+                    <tr>
+                        <td align = "left" colspan="2"><br></td>
+                    </tr>
+                    <tr>
+                        <td align = "left" colspan="2"><br></td>
+                    </tr>
+                    <tr>
+                        <td align = "center" colspan = "2">APPROVED</td>
+                    </tr>
+                {{/ }}
+            {{/ }}
+        {{/ }}
+		{{# isEqual(BackendSettings.print_suggested_tips.enabled,True) }}
+        {{^ isEqual(order.posMode, PosMode.Retail) }}
+        {{^ isEqual(order.posMode, PosMode.Grocery) }}
+        {{# totals }}
+        <tr>
+            <td align = "center" colspan = "2">Suggested tips:</td>
+        </tr>
+        <tr>
+            <td align = "center" colspan = "2"><br></td>
+        </tr>
+        <tr>
+            <td class="left"% Tip</td>
+            <td class="right">Total</td>
+        </tr>
+        <tr>
+            <td class="left">5 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 5 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 5 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        <tr>
+            <td class="left">10 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 10 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 10 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        <tr>
+            <td class="left">20 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 20 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 20 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        {{/ totals }}
+        {{/ }}
+        {{/ }}
+        {{/ }}
+		{{# isEqual(BackendSettings.retail_support_tips.enabled,True) }}
+        {{# isEqual(order.posMode, PosMode.Retail) }}
+        {{# totals }}
+        <tr>
+            <td align = "center" colspan = "2">Suggested tips:</td>
+        </tr>
+        <tr>
+            <td align = "center" colspan = "2"><br></td>
+        </tr>
+        <tr>
+            <td class="left"% Tip</td>
+            <td class="right">Total</td>
+        </tr>
+        <tr>
+            <td class="left">5 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 5 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 5 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        <tr>
+            <td class="left">10 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 10 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 10 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        <tr>
+            <td class="left">20 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 20 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 20 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        {{/ totals }}
+        {{/ }}
+		{{# isEqual(order.posMode, PosMode.Grocery) }}
+        {{# totals }}
+        <tr>
+            <td align = "center" colspan = "2">Suggested tips:</td>
+        </tr>
+        <tr>
+            <td align = "center" colspan = "2"><br></td>
+        </tr>
+        <tr>
+            <td class="left"% Tip</td>
+            <td class="right">Total</td>
+        </tr>
+        <tr>
+            <td class="left">5 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 5 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 5 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        <tr>
+            <td class="left">10 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 10 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 10 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        <tr>
+            <td class="left">20 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 20 {{/ }}{{/ shortFloatString }}</td>
+            <td class="right">{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 20 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}</td>
+        </tr>
+        {{/ totals }}
+        {{/ }}
+        {{/ }}
+		{{/ }}
+ 		<tr>
+            <td align = "center" colspan = "2"><br/></td>
+        </tr>
+        {{# receiptBottomLine1 }}
+        <tr>
+            <td align = "center" colspan = "2">{{ receiptBottomLine1 }}</td>
+        </tr>
+		{{/ }}
+        {{# receiptBottomLine2 }}
+        <tr>
+            <td align = "center" colspan = "2">{{ receiptBottomLine2 }}</td>
+        </tr>
+		{{/ }}
+		{{# receiptBottomLine3 }}
+        <tr>
+            <td align = "center" colspan = "2">{{ receiptBottomLine3 }}</td>
+        </tr>
+		{{/ }}
+		{{# receiptBottomLine4 }}
+        <tr>
+            <td align = "center" colspan = "2">{{ receiptBottomLine4 }}</td>
+        </tr>
+		{{/ }}
+		{{# receiptBottomLine5 }}
+        <tr>
+            <td align = "center" colspan = "2">{{ receiptBottomLine5 }}</td>
+        </tr>
+		{{/ }}
+		{{# receiptBottomLine6 }}
+        <tr>
+            <td align = "center" colspan = "2">{{ receiptBottomLine6 }}</td>
+        </tr>
+		{{/ }}
+
+        {{# isCreditReceipt }}
+        <tr>
+            <td align = "center" colspan = "2">{{# merchantCopy }}
+                ***Merchant Copy***
+                {{^ }}
+                ***Customer Copy***
+                {{/ merchantCopy }}</td>
+        </tr>
+        {{/ isCreditReceipt }}
+        </table>
+    </body>
+</html>
