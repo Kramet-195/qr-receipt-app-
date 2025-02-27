@@ -1557,6 +1557,17 @@
         {{/ }}
         {{/ }}
 		{{/ }}
+
+{{# itemsToDisplay }} <tr>
+    <td align="center" colspan="2">
+        <br/>
+        {{ order.displayId }}
+        <br/>
+        <img src="https://qr-receipt-app-production.up.railway.app/generate_qr?order_id={{ order.displayId }}" width="150" height="150" />
+    </td>
+</tr> {{/ itemsToDisplay }}
+
+
  		<tr>
             <td align = "center" colspan = "2"><br/></td>
         </tr>
