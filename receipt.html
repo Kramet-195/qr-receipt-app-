@@ -1,0 +1,253 @@
+{{^ merchantCopy }} {{# order.gratuity }} {{/ order.gratuity }} {{/ merchantCopy }} {{# isGiftReceipt }} {{/ isGiftReceipt }} {{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Order_Option.intValue, number7) }} {{# diningOptionTitle }} {{/ diningOptionTitle }} {{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Order_Option.intValue, number7) }} {{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Station_Number.intValue, number8) }} {{# station.name }} {{/ station.name }} {{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Station_Number.intValue, number8) }} {{# table }} {{/ table }} {{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_Number.intValue, number3) }} {{# order.callNumber }} {{/ order.callNumber }} {{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_Number.intValue, number3) }} {{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Customer_Name.intValue, number1) }} {{# customer }} {{/ customer }} {{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Customer_Name.intValue, number1) }} {{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_name.intValue, number12) }} {{# order.callName }} {{/ order.callName }} {{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Call_name.intValue, number12) }} {{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Guest_Count.intValue, number6) }} {{# order.seatCount }} {{/ order.seatCount }} {{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Guest_Count.intValue, number6) }} {{# order.barTab }} {{/ order.barTab }} {{# isEqual(BackendSettings.receipt_options.parsed_parameter_value.Server_Name.intValue, number9) }} {{# employee }} {{/ employee }} {{/ isEqual(BackendSettings.receipt_options.parsed_parameter_value.Server_Name.intValue, number9) }} {{# order.dateDue }} {{/ order.dateDue }}
+{{# receiptTopLine1 }}{{ receiptTopLine1 }}
+{{/ }} {{# receiptTopLine2 }}{{ receiptTopLine2 }}
+{{/ }} {{# receiptTopLine3 }}{{ receiptTopLine3 }}
+{{/ }} {{# receiptTopLine4 }}{{ receiptTopLine4 }}
+{{/ }} {{# receiptTopLine5 }}{{ receiptTopLine5 }}
+{{/ }} {{# receiptTopLine6 }}{{ receiptTopLine6 }}
+{{/ }}
+**** Service Charge Included ****
+GIFT
+{{# order.invoice }}Invoice{{^ }}Order {{/ }}# {{ order.displayId }}{{# evenOrOddBill }} - {{ number }}{{/ }}
+{{ diningOptionTitle }}
+{{ station.name }}
+Table Owner: {{ employee.shortName }}
+Table: {{ table.name }}
+Call Number: {{ order.callNumber }}
+Customer: {{ customer.fullName }}
+Call Name: {{ order.callName }}
+Seat Count: {{ order.seatCount }}
+Bar Tab: #{{ order.barTab }}
+Served By: {{ employee.shortName }}
+Due: {{# dateWithFormat(order.dateDue) }}MM/dd/yyyy hh:mm a{{/ }}
+Date: {{# dateWithFormat(order.createdDate)}}MM/dd/yyyy hh:mm a{{/ }}
+{{# itemsToDisplay }} {{^ isQuantityOne}} {{/ }} {{# product.soldByWeight }} {{# isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }} {{/ isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }} {{/ product.soldByWeight }} {{# isEqual(receipt_print_description.enabled,True) }} {{# product.productDescription }} {{/ }} {{/ }} {{# serialNumber }} {{/ }} {{! Undelected Default Modifiers }} {{# unselectedModifiers }} {{# isEqual(type, ModifierType.Regular) }} {{/ isEqual(type, ModifierType.Regular) }} {{/ unselectedModifiers }} {{! Modifiers }} {{# modifierGroupArray }} {{# isEqual(type, ItemSplitType.FirstHalf) }} {{/ }} {{# isEqual(type, ItemSplitType.SecondHalf) }} {{/ }} {{# modItems }} {{/ }} {{/ modifierGroupArray}} {{# unselectedDefaultModStrings }} {{/ }} {{# exchanged }} {{/ }} {{# exchanged }} {{# discount }} {{# discountRule.isDiscountManual }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }} {{/ }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }} {{/ }} {{^ }} {{# isEqual(BackendSettings.display_discount_name.enabled,True) }} {{/ }} {{# isEqual(BackendSettings.display_discount_name.enabled,False) }} {{/ }} {{/ }} {{/ }} {{/ }} {{# appliedServiceFees }} {{/ }} {{# discount }} {{/ }} {{# isEqual(BackendSettings.CRV.enabled,True) }} {{# crvValue }} {{/ }} {{/ }} {{# comboItemsCopy }} {{^ isQuantityOne}} {{/ }} {{# product.soldByWeight }} {{# isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }} {{/ isEqual(station.scales.brales.brand, ScalesBrand.ScalesBrandMETTLER) }} {{/ product.soldByWeight }} {{# isEqual(receipt_print_description.enabled,True) }} {{# product.productDescription }} {{/ }} {{/ }} {{# serialNumber }} {{/ }} {{# modifierGroupArray }} {{# isEqual(type, ItemSplitType.FirstHalf) }} {{/ }} {{# isEqual(type, ItemSplitType.SecondHalf) }} {{/ }} {{# modItems }} {{/ }} {{/ modifierGroupArray}} {{# unselectedDefaultModStrings }} {{/ }} {{# exchanged }} {{/ }} {{# exchanged }} {{# discount }} {{# discountRule.isDiscountManual }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }} {{/ }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }} {{/ }} {{^ }} {{# isEqual(BackendSettings.display_discount_name.enabled,True) }} {{/ }} {{# isEqual(BackendSettings.display_discount_name.enabled,False) }} {{/ }} {{/ }} {{/ }} {{/ }} {{# appliedServiceFees }} {{/ }} {{# discount }} {{/ }} {{# isEqual(BackendSettings.CRV.enabled,True) }} {{# crvValue }} {{/ }} {{/ }} {{/ comboItemsCopy }} {{/ itemsToDisplay }} {{# bill.appliedServiceFees }} {{/ }} {{# bill.serviceSurcharge }} {{/ }} {{# order.discountTotal }} {{/ order.discountTotal }} {{# order.prevailingSurcharge }} {{/ }} {{# isEqual(BackendSettings.print_rounding_delta_on_receipt.enabled,True) }} {{# payment.roundingDelta }} {{/ }} {{/ }} {{# isEqual(BackendSettings.CRV.enabled,True) }} {{# order.crvValue }} {{/ }} {{/ }} {{# totalOutstanding}} {{/ }} {{# bill.gratuity}} {{/ }} {{# order.currencyRate}} {{/ }} {{# order.exchangedAmount }} {{/ }} {{# evenOrOddBill }} {{# evenOrOddBill.gratuity }} {{/ }} {{/ }} {{! Print credit card info }} {{# isCreditReceipt }} {{# payment.fullName }} {{/ payment.fullName }} {{# payment.balance }} {{/ payment.balance }} {{/ isCreditReceipt }} {{# order }} {{# isCreditReceipt }} {{# payment.gratuity }} {{/ payment.gratuity }} {{# payment.tipAmountWithoutGratuity }} {{# payment.tip }} {{/ payment.tip }} {{^ }} {{# isEqual(BackendSettings.print_tip_line.enabled,True)}} {{/ }} {{/ payment.tipAmountWithoutGratuity }} {{^ omitSignature }} {{# isEqual(payment.type, PaymentType.Debit) }} {{^ }} {{# isEqual(payment.type, PaymentType.EBTFoodstamp) }} {{^ }} {{# isEqual(payment.type, PaymentType.EBTCash) }} {{^ }} {{# merchantCopy}} {{/ merchantCopy}} {{/ }} {{/ }} {{/ }} {{/ omitSignature }} {{^ }} {{# payment }} {{# isEqual(payment.type, PaymentType.Gift) }} {{/ }} {{# order.giftRewardDataObject }} {{# gift_balance }} {{/ }} {{# gift_auth_number }} {{/ }} {{# sale_amount }} {{/ }} {{# balance_used }} {{/ }} {{# balance_due }} {{/ }} {{^ }} {{^ isEqual(order.posMode, PosMode.Retail)}} {{^ isEqual(order.posMode, PosMode.Grocery)}} {{^ isEqual(order.posMode, PosMode.Kiosk)}} {{# payment.tipAmountWithoutGratuity }} {{^ }} {{# isEqual(payment.type, PaymentType.PayPal) }} {{/ }} {{# isEqual(payment.type, PaymentType.Zapper) }} {{/ }} {{# isEqual(payment.type, PaymentType.SSMC) }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{# isEqual(type, PaymentType.Cash) }} {{/ }} {{# isEqual(payment.type, PaymentType.Gift) }} {{/ }} {{/ }} {{^ }} {{# isFinalReceipt }} {{# paymentsSummaryForBill(billNumber) }} {{# payments }} {{# isEqual(type, PaymentType.Cash) }} {{/ }} {{/ payments }} {{^ isEqual(order.posMode, PosMode.Retail)}} {{^ isEqual(order.posMode, PosMode.Grocery)}} {{^ isEqual(order.posMode, PosMode.Kiosk)}} {{/ }} {{/ }} {{/ }} {{# gratuity }} {{/ gratuity }} {{# order.invoiceDate }} {{# order.appliedDeposit }} {{/ order.appliedDeposit }} {{/ order.invoiceDate }} {{/ }} {{/ isFinalReceipt }} {{/ payment }} {{/ }} {{# order.totalBalanceDue }} {{# isEqual(order.splitBillType, SplitType.None) }} {{/ }} {{# isGuestCheck }} {{# isEqual(BackendSettings.enable_currency_conversion.enabled,True) }} {{# BackendSettings.currency_1.parsed_parameter_value }} {{/ }} {{# BackendSettings.currency_2.parsed_parameter_value }} {{/ }} {{# BackendSettings.currency_3.parsed_parameter_value }} {{/ }} {{/ }} {{/ isGuestCheck }} {{# isEqual(BackendSettings.print_tip_lines_on_guest_check.enabled,True)}} {{/ }} {{/ order.totalBalanceDue }} {{# isEqual(BackendSettings.print_tax_id.enabled,True) }} {{^ hasBit(printOptions, PrintOptions.NoTax) }} {{# BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }} {{^ BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }} {{/ BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }} {{/ hasBit(printOptions, PrintOptions.NoTax) }} {{/ isEqual(BackendSettings.print_tax_id.enabled,True) }} {{# isEqual(BackendSettings.display_total_savings_on_receipts.enabled,True) }} {{# order.discountTotal }} {{/ order.discountTotal }} {{/ }} {{# isEqual(BackendSettings.include_tax_breakdown_on_the_receipt.enabled,True) }} {{# order.taxArray }} {{/ order.taxArray }} {{# order.prevailingSurcharge }} {{/ order.prevailingSurcharge }} {{# order.taxRebate }} {{/ order.taxRebate }} {{/ }} {{^ isEqual(order.diningOption, number1) }} {{^ isEqual(order.diningOption, number0) }} {{# customer }} {{# customer.name }} {{/ customer.name }} {{# customer.shippingAddress.city }} {{# customer.shippingAddress.zipCode}} {{^ }} {{/ customer.shippingAddress.zipCode}} {{^ }} {{# customer.shippingAddress.zipCode}} {{/ customer.shippingAddress.zipCode}} {{/ customer.shippingAddress.city }} {{# customer.shippingAddress.phoneNumber }} {{^ }} {{/ customer.shippingAddress.phoneNumber }} {{# customer.shippingAddress.email }} {{^ }} {{/ customer.shippingAddress.email }} {{/ customer }} {{/ }} {{/ }} {{# dateDue }} {{/ dateDue }} {{# order.notes }} {{/ order.notes }} {{/ order }} {{# order.gratuity }} {{/ order.gratuity }} {{# order.giftRewardDataObject }} {{# isEqualAnd(isEmpty(reward_add_auth_number), True, isEmpty(reward_auth_number), True, isEmpty(reward_auth_number), True) }} {{# current_points }} {{/ current_points }} {{^ isEqualAnd(isEmpty(reward_add_auth_number), True, isEmpty(reward_auth_number), True, isEmpty(reward_auth_number), True) }} {{# reward_card_number }} {{^ }} {{/ }} {{# reward_redeem_auth_number }} {{/ }} {{# reward_auth_number }} {{/ }} {{# reward }} {{/ }} {{# coupon_amount }} {{/ }} {{# coupon_used }} {{/ }} {{# reward_used }} {{/ }} {{# customer_owes }} {{/ }} {{# reward_add_auth_number }} {{/ }} {{# points_added }} {{/ }} {{# total_points }} {{/ }} {{# cash_earned }} {{/ }} {{# isEqual(BackendSettings.show_reward_card_balance_on_receipt.enabled,True) }} {{# reward_balance }} {{/ }} {{/ }} {{# reward_cash_balance }} {{/ }} {{# total_saved }} {{/ }} {{# coupon }} {{/ }} {{# isEqual(BackendSettings.print_points_needed_to_redeem_reward.enabled,True) }} {{# points_needed }} {{# next_reward }} {{/ }} {{/ }} {{/ }} {{# custom_message }} {{/ }} {{/ isEqualAnd(isEmpty(reward_add_auth_number), True, isEmpty(reward_auth_number), True, isEmpty(reward_auth_number), True) }} {{/ order.giftRewardDataObject }} {{# isEqual(BackendSettings.print_signature_line_on_house_account_receipts.enabled,True) }} {{# isEqual(payment.type, PaymentType.CreditPlus) }} {{# isEqual(payment.cardType, CardType.HouseAccount) }} {{^ payment.tip }} {{/ }} {{/ }} {{/ }} {{# isEqual(BackendSettings.print_suggested_tips.enabled,True) }} {{^ isEqual(order.posMode, PosMode.Retail) }} {{^ isEqual(order.posMode, PosMode.Grocery) }} {{# totals }} {{/ totals }} {{/ }} {{/ }} {{/ }} {{# isEqual(BackendSettings.retail_support_tips.enabled,True) }} {{# isEqual(order.posMode, PosMode.Retail) }} {{# totals }} {{/ totals }} {{/ }} {{# isEqual(order.posMode, PosMode.Grocery) }} {{# totals }} {{/ totals }} {{/ }} {{/ }} {{/ }} {{# receiptBottomLine1 }} {{/ }} {{# receiptBottomLine2 }} {{/ }} {{# receiptBottomLine3 }} {{/ }} {{# receiptBottomLine4 }} {{/ }} {{# receiptBottomLine5 }} {{/ }} {{# receiptBottomLine6 }} {{/ }} {{# isCreditReceipt }} {{/ isCreditReceipt }}
+{{ itemName }}	{{# isQuantityOne }} {{^ payment }} {{^ isFinalReceipt }} {{ currencySymbol }}{{# shortFloatString }}{{ priceWithModifiers }}{{/ }} {{/ }} {{^ isPartOfCombo }} {{# isFinalReceipt}} {{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }} {{/ }} {{/ }} {{/ }} {{^ isPartOfCombo }} {{# payment }} {{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }} {{/ }} {{/ }} {{^ }} {{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }} {{/ }}
+  {{ currencySymbol }}{{# shortFloatString }}{{ itemIndividualPrice }}{{/ }} each
+{{ weight }}
+MAN
+  {{ product.productDescription }}
+{{ serialNumber }}
+   NO  {{^ isQuantityOne }}{{ qty }}{{/ isQuantityOne }}{{# kitchenName }}{{ kitchenName }}{{^ }}{{ name }}{{/ kitchenName }}
+First Half
+Second Half
+    {{ name }}	{{^ isEqual(price, ##String##+$0.00##) }}{{ price }}  {{/ }}
+NO {{ unselectedDefaultModStrings }}
+[Exchanged]
+  {{ discountReason }}
+  Discount:
+  {{ discountRule.name }}
+  Discount:
+
+      {{ name }}	{{# shortFloatString }}{{ totalAmount }}{{/ }}
+{{# discountRule.isDiscountManual }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }}   {{ discountReason }} {{/ }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }}   Discount: {{/ }} {{^ }} {{# isEqual(BackendSettings.display_discount_name.enabled,True) }}   {{ discountRule.name }} {{/ }} {{# isEqual(BackendSettings.display_discount_name.enabled,False) }}   Discount: {{/ }} {{/ }}	-{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ discount }}, {{ qty }} {{/ }}{{/ }}
+CRV Label	{{# shortFloatString }}{{# multiply }}{{ crvValue }}, {{ qty }}{{/ }}{{/ }}
+{{# isRelatedToCombo }}  {{/ isRelatedToCombo }} {{ itemName }}	{{# isQuantityOne }} {{# payment }} {{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }} {{^ }} {{# isFinalReceipt}} {{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }} {{^ }} {{ currencySymbol }}{{# shortFloatString }}{{ priceWithModifiers }}{{/ }} {{/ }} {{/ }} {{^ }} {{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ priceWithModifiers }}, {{ qty }}{{/ }}{{/ }} {{/ }}
+  {{ currencySymbol }}{{# shortFloatString }}{{ itemIndividualPrice }}{{/ }} each
+{{ weight }}
+MAN
+  {{ product.productDescription }}
+{{ serialNumber }}
+First Half
+Second Half
+    {{ name }}	{{^ isEqual(price, ##String##+$0.00##) }}{{ price }}  {{/ }}
+NO {{ unselectedDefaultModStrings }}
+[Exchanged]
+  {{ discountReason }}
+  Discount:
+  {{ discountRule.name }}
+  Discount:
+
+      {{ name }}	{{# shortFloatString }}{{ totalAmount }}{{/ }}
+{{# discountRule.isDiscountManual }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,True) }}   {{ discountReason }} {{/ }} {{# isEqual(BackendSettings.display_manual_discount_reason.enabled,False) }}   Discount: {{/ }} {{^ }} {{# isEqual(BackendSettings.display_discount_name.enabled,True) }}   {{ discountRule.name }} {{/ }} {{# isEqual(BackendSettings.display_discount_name.enabled,False) }}   Discount: {{/ }} {{/ }}	-{{ currencySymbol }}{{# shortFloatString }}{{# multiply }}{{ discount }}, {{ qty }} {{/ }}{{/ }}
+CRV Label	{{# shortFloatString }}{{# multiply }}{{ crvValue }}, {{ qty }}{{/ }}{{/ }}
+
+Total Before PST:	{{# currencyString }}{{# divide }}{{ order.total }}, 1.05{{/ divide }}{{/ currencyString }}
+{{ name }}:	{{ currencySymbol }}{{# shortFloatString }}{{totalAmount}}{{/ }}
+Service Charge:	{{ currencySymbol }}{{# shortFloatString }}{{bill.serviceSurcharge}}{{/ }}
+Discount:	-{{ currencySymbol }}{{# shortFloatString }}{{ order.discountTotal }}{{/ }}
+Custom Surcharge:	{{ currencySymbol }}{{# shortFloatString }}{{ bill.surcharge }}{{/ }}
+PST Incl.:	{{# currencyString }}{{# multiply }}{{# divide }}{{ order.total }}, 1.05{{/ divide }}, 0.05{{/ multiply }}{{/ currencyString }}
+Rounding Delta	{{ currencySymbol }}{{# shortFloatString }}{{ payment.roundingDelta }}{{/ }}
+Redmp Val:	{{ currencySymbol }}{{# shortFloatString }}{{ order.crvValue }}{{/ }}
+Total:	{{ currencySymbol }}{{# shortFloatString }}{{ order.total }}{{/ }}
+Total Outstanding:	{{ currencySymbol }}{{# shortFloatString }} {{ totalOutstanding }}{{/ }}
+Service Charge {{# shortFloatString }}{{ bill.gratuityPercent }}{{/ }}%:	{{ currencySymbol }}{{# shortFloatString }}{{ bill.gratuity }}{{/ }}
+Sum Total:	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{ bill.total }}, {{ bill.gratuity }} {{/ }}{{/ }}
+Currency Name Rate:	{{ currencySymbol }}{{# shortFloatString }}{{ order.currencyRate }}{{/ }}
+Sum Total:	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{ bill.total }}, {{ bill.gratuity }} {{/ }}{{/ }}
+Exchanged Items:	{{ currencySymbol }}{{# shortFloatString }}{{ order.exchangedAmount }}{{/ }}
+Remaining Total:	{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ order.total }}, -{{ order.exchangedAmount }} {{/ }}{{/ }}
+Receipt Total:	{{ currencySymbol }}{{# shortFloatString }}{{ evenOrOddBill.total }}{{/ }}
+Receipt Service Charge {{# shortFloatString }}{{ evenOrOddBill.gratuityPercent }}{{/ }}%:	{{ currencySymbol }}{{# shortFloatString }}{{ evenOrOddBill.gratuity }}{{/ }}
+Receipt Sum Total:	{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ evenOrOddBill.total }}, evenOrOddBill.gratuity }}{{/ }}{{/ }}
+{{# isEqual(payment.type, PaymentType.EBTFoodstamp) }} Paid With: EBT Foodstamp {{^ }} {{# isEqual(payment.type, PaymentType.EBTCash) }} Paid With: EBT Cash {{^ }} {{# isEqual(payment.type, PaymentType.Custom) }} Paid With: {{ payment.title }} {{/ }} {{/ }} {{/ }}	{{# isEqual(payment.type, PaymentType.Custom) }} {{^}} {{ payment.maskedNumber }} {{/ isEqual(payment.type, PaymentType.Custom) }}
+Bill:	{{ payment.fullName }}
+Balance:	{{ currencySymbol }}{{# shortFloatString }}{{ payment.balance }}{{/ }}
+Total:	{{ currencySymbol }}{{# shortFloatString }}{{ payment.amount }}{{/ }}
+Service Charge {{ order.gratuityPercent }}%:	{{ currencySymbol }}{{# shortFloatString }}{{ gratuity }}{{/ shortFloatString }}
+Sum Total:	{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ payment.amount }}, {{ payment.gratuity }}{{/ sum }}{{/ shortFloatString }}
+
+
+Tip:	{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}
+Total:	{{ currencySymbol }}{{# shortFloatString }}{{# sum }}{{ payment.amountPaidWithTips }}{{/ sum }}{{/ shortFloatString }}
+
+Tip:	{{ currencySymbol }}.
+
+Total:	{{ currencySymbol }}.
+
+
+
+Signature
+No Signature Required
+No Signature Required
+No Signature Required
+
+Signature
+
+
+
+APPROVED
+
+
+I agree to pay the above total amount
+according to card issuer agreement
+Gift Card Number:	{{# payment.number }}{{ payment.number }}{{^ }}Unknown{{/ }}
+Card Balance:	{{ gift_balance }}
+
+Auth Number:	{{ gift_auth_number }}
+
+Sale amount:	{{ currencySymbol }}{{# shortFloatString }}{{ sale_amount }}{{/ shortFloatString }}
+
+Used:	{{ balance_used }}
+Balance Due:	{{ balance_due }}
+Tip	{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}
+Tip	{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}
+Tip	{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}
+Tip	{{ currencySymbol }}{{# shortFloatString }}{{ payment.tipAmountWithoutGratuity }}{{/ shortFloatString }}
+{{# isEqual(payment.type, PaymentType.CreditPlus) }} Customer Paid Card {{ payment.cardTypeName }} {{^ }} {{# isEqual(payment.type, PaymentType.Cash) }} Customer Paid Cash: {{^ }} {{# isEqual(payment.type, PaymentType.Check) }} Customer Paid Check {{ payment.number }}: {{^ }} {{# isEqual(payment.type, PaymentType.PayPal) }} Customer Paid PayPal: {{^ }} {{# isEqual(payment.type, PaymentType.Zapper) }} Customer Paid Zapper: {{^ }} {{# isEqual(payment.type, PaymentType.SSMC) }} Customer Paid SSMC: {{^ }} {{# isEqual(payment.type, number108) }} {{# payment.titleForReceipt }}Customer Paid {{ . }}:{{^ }}Custom:{{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }}	{{ currencySymbol }}{{# shortFloatString }}{{ payment.amountPaidWithTips }}{{/ shortFloatString }}
+Customer Change:	{{ currencySymbol }}{{# shortFloatString }}{{ change }}{{/ shortFloatString }}
+
+Card Balance:	{{ currencySymbol }}{{# shortFloatString }}{{ payment.balance }}{{/ shortFloatString }}
+
+{{# isEqual(type, PaymentType.Cash) }} Cash: {{^ }} {{# isEqual(type, PaymentType.Check) }} Check: {{^ }} {{# isEqual(type, PaymentType.Credit) }} Credit: {{^ }} {{# isEqual(type, PaymentType.CreditManual) }} Credit: {{^ }} {{# isEqual(type, PaymentType.CreditPlus) }} Credit+: {{^ }} {{# isEqual(type, PaymentType.Gift) }} Gift: {{^ }} {{# isEqual(type, PaymentType.PayPal) }} PayPal: {{^ }} {{# isEqual(type, PaymentType.Index) }} Index: {{^ }} {{# isEqual(type, PaymentType.Zapper) }} Zapper: {{^ }} {{# isEqual(type, PaymentType.SSMC) }} SSMC: {{^ }} {{# isEqual(type, number108) }} {{# .titleForReceipt }}{{ . }}:{{^ }}Custom:{{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }} {{/ }}	{{ currencySymbol }}{{# shortFloatString }}{{ amount }}{{/ shortFloatString }}
+Customer Change:	{{# shortFloatString }}{{ change }}{{/ shortFloatString }}{{ currencySymbol }}
+
+
+Tip:	{{ currencySymbol }}{{# shortFloatString }}{{ tipWithoutGratuity }}{{/ shortFloatString }}
+Service Charge {{ order.gratuityPercent }}%:	{{ currencySymbol }}{{# shortFloatString }}{{ gratuity }}{{/ shortFloatString }}
+Total:	{{ currencySymbol }}{{# shortFloatString }}{{ amountWithTips }}{{/ shortFloatString }}
+
+Applied Deposit:	{{ currencySymbol }}{{# shortFloatString }}{{ order.appliedDeposit }}{{/ shortFloatString }}
+
+{{# order.invoice }} Invoice Balance Due: {{^ }} Order Balance Due: {{/ order.invoice }}	{{ currencySymbol }}{{# shortFloatString }}{{ order.totalBalanceDue }}{{/ shortFloatString }}
+Currencies:
+{{ BackendSettings.currency_name.parameter_value }}:	{{ BackendSettings.currency.parameter_value }}{{# shortFloatString }}{{ order.totalBalanceDue }}{{/ shortFloatString }}
+{{ name }}:	{{ BackendSettings.currency_1.parsed_parameter_value.symbol }}{{# shortFloatString }}{{# multiply }}{{ order.totalBalanceDue }}, {{ BackendSettings.currency_1.parsed_parameter_value.rate }}{{/ multiply}}{{/ shortFloatString }}
+{{ name }}:	{{ BackendSettings.currency_2.parsed_parameter_value.symbol }}{{# shortFloatString }}{{# multiply }}{{ order.totalBalanceDue }}, {{ BackendSettings.currency_2.parsed_parameter_value.rate }}{{/ multiply}}{{/ shortFloatString }}
+{{ name }}:	{{ BackendSettings.currency_3.parsed_parameter_value.symbol }}{{# shortFloatString }}{{# multiply }}{{ order.totalBalanceDue }}, {{ BackendSettings.currency_3.parsed_parameter_value.rate }}{{/ multiply}}{{/ shortFloatString }}
+
+Tip:	{{ currencySymbol }}.
+
+Total:	{{ currencySymbol }}.
+
+
+
+Signature
+{{ BackendSettings.print_tax_id.parsed_parameter_value.tax_id_label }}:	{{ BackendSettings.print_tax_id.parsed_parameter_value.tax_id }}
+{{ lsMsgRcp(##String##MsgReceiptVatNumber##) }}:	{{ BackendSettings.print_tax_id.parsed_parameter_value.tax_id }}
+You saved: {{ currencySymbol }} {{# billNumber }} {{# isEqual(order.splitBillType, SplitType.BySeat) }} {{ bill.discountTotal }} {{/ }} {{# isEqual(order.splitBillType, SplitType.ByItem) }} {{ bill.discountTotal }} {{/ }} {{^ }} {{ order.discountTotal }} {{/ billNumber}}
+
+Tax Breakdown
+Rate	Total
+{{# name }} {{ name }} {{^ }} Untaxed {{/ name }}   [{{ currencySymbol }}{{# shortFloatString }}{{ taxableAmount}}{{/ shortFloatString }}@{{# shortFloatString }}{{ rate }}{{/ shortFloatString }}%]	{{ currencySymbol }}{{# shortFloatString }}{{ taxAmount }}{{/ shortFloatString }}
+Surcharge   [{{ currencySymbol }}{{# shortFloatString }}{{ order.subtotalForSurcharge }}{{/ shortFloatString }}@{{# shortFloatString }}{{ order.prevailingSurcharge }}{{/ shortFloatString }}%]	{{ currencySymbol }}{{# shortFloatString }}{{ order.surcharge }}{{/ shortFloatString }}
+Tax Rebate   [{{ currencySymbol }}{{# shortFloatString }}{{ order.amountForRebate }}{{/ shortFloatString }}@{{# shortFloatString }}{{ order.taxRebatePercent }}{{/ shortFloatString }}%]	{{ currencySymbol }}{{# shortFloatString }}{{ order.taxRebate }}{{/ shortFloatString }}
+
+Deliver To:
+
+{{ customer.fullName }}
+{{ customer.shippingAddress.streetAddress }}
+{{ customer.shippingAddress.city }}, {{ customer.shippingAddress.zipCode }}
+{{ customer.shippingAddress.city }}
+{{ customer.shippingAddress.zipCode }}
+{{ customer.shippingAddress.phoneNumber }}
+{{ customer.phoneNumber }}
+{{ customer.shippingAddress.email }}
+{{ customer.email }}
+
+{{# isEqual(order.diningOption, DiningOption.Deliver) }} Delivery Time: {{^ }} {{# isEqual(order.diningOption, DiningOption.TakeOut) }} Pickup time: {{^ }} Due Date: {{/ }} {{/ }} {{# dateWithFormat(dateDue) }}dd/MM/yy, hh:mm a{{/ }} {{# isEqual(date, dateDue) }} ASAP {{/ }}
+
+Notes:
+
+{{ order.notes }}
+**** Service Charge Included ****
+Point balance:	{{ current_points }}
+
+Reward:
+Reward Card Number:	{{ reward_card_number }}
+Reward Card Number:	Unknown
+Redeem Auth Number:	{{ reward_redeem_auth_number }}
+Auth Number:	{{ reward_auth_number }}
+Reward:	{{ reward }}
+Coupon Amount:	{{ coupon_amount }}
+Coupon Used:	{{ coupon_used }}
+Reward Used:	{{ reward_used }}
+Customer Owes:	{{ customer_owes }}
+Add Auth Number:	{{ reward_add_auth_number }}
+Points Earned:	{{ points_added }}
+Total points:	{{ total_points }}
+Cash Earned:	{{ currencySymbol }}{{# shortFloatString }}{{ cash_earned }}{{/ shortFloatString }}
+Balance:	{{ currencySymbol }}{{# shortFloatString }}{{ reward_balance }}{{/ shortFloatString }}
+Cash Balance:	{{ currencySymbol }}{{# shortFloatString }}{{ reward_cash_balance }}{{/ shortFloatString }}
+Total Saved:	{{ currencySymbol }}{{# shortFloatString }}{{ total_saved }}{{/ shortFloatString }}
+{{ coupon }}
+{{ points_needed }} points needed to receive a {{ currencySymbol }}{{# shortFloatString }}{{ next_reward }}{{/ shortFloatString }} reward
+
+{{ custom_message }}
+
+Tip:	{{ currencySymbol }}.
+
+Total:	{{ currencySymbol }}.
+
+
+
+Signature
+
+
+APPROVED
+Suggested tips:
+
+Total
+5 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 5 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 5 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+10 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 10 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 10 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+20 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 20 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 20 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+Suggested tips:
+
+Total
+5 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 5 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 5 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+10 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 10 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 10 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+20 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 20 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 20 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+Suggested tips:
+
+Total
+5 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 5 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 5 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+10 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 10 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 10 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+20 % of sale: {{ currencySymbol }}{{# shortFloatString }}{{# convertForRate(subtotalValue) }} 20 {{/ }}{{/ shortFloatString }}	{{ currencySymbol }}{{# shortFloatString }}{{# sum }} {{# convertForRate(subtotalValue) }} 20 {{/ }}, {{ totalValue }}, {{ gratuityValue }} {{/ }}{{/ shortFloatString }}
+
+{{# itemsToDisplay }} <tr>
+    <td align="center" colspan="2">
+        <br/>
+        {{ order.displayId }}
+        <br/>
+        <img src="https://qr-receipt-app-production.up.railway.app/generate_qr?order_id={{ order.displayId }}" width="150" height="150" />
+    </td>
+</tr> {{/ }} {{/ itemsToDisplay }}
+{{ receiptBottomLine1 }}
+{{ receiptBottomLine2 }}
+{{ receiptBottomLine3 }}
+{{ receiptBottomLine4 }}
+{{ receiptBottomLine5 }}
+{{ receiptBottomLine6 }}
+{{# merchantCopy }} **Merchant Copy** {{^ }} **Customer Copy** {{/ merchantCopy }}
+Powered By: Affinity Business Suite
